@@ -1,14 +1,39 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const navLinks = [
+  { name: "Login", href: "/login" },
+  { name: "Register", href: "/register" },
+  { name: "Recovery password", href: "/forgot-password" },
+];
+
 export default function AuthLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
+  const pathname = usePathname();
+
   return (
-    <html>
-      <body className="bg-red-300">
-        <main>{children}</main>
-        <footer>Footer for auth</footer>
-      </body>
-    </html>
+    <div className="bg-green-200">
+      <div className="flex gap-2 mb-4 bg-blue-600">
+        {navLinks.map((link) => {
+          const isActive =
+            pathname === link.href || pathname.startsWith(link.href);
+          return (
+            <Link
+              key={link.name}
+              href={link.href}
+              className={isActive ? "underline text-red-600" : "text-blue-100"}
+            >
+              {link.name}
+            </Link>
+          );
+        })}
+      </div>
+      <div>{children}</div>
+    </div>
   );
 }
